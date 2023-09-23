@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    image: kkmartui
+    container_name: kkmartui
+    env_file: ./.env
+    restart: unless-stopped
+    volumes:
+      - .:/kkmartapp
+    ports:
+      - "3001:3001"
+    networks:
+      - kkmart
+
+  database:
+    platform: linux/x86_64
+    image: mysql:8.0
+    container_name: kkmartdb
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_ROOT: root
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - kkmart
+
+volumes:
+  db:
+
+networks:
+  kkmart:
+    driver: bridge
+  

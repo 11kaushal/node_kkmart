@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<head>
+    <title>PRODUCT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav {
+        display: flex;
+        justify-content: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin: 20px 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background-color: #333;
+        }
+
+        .author-name {
+            font-weight: bold;
+        }
+
+        .post-content {
+            line-height: 1.6;
+        }
+
+        .post-footer {
+            margin-top: 20px;
+            font-style: italic;
+        }
+
+        .operation {
+            max-width: 800px;
+            margin: 20px auto;
+            /* background-color: #fff; */
+            /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+            /* border-radius: 8px; */
+            padding: 20px;
+        }
+
+        .operation a{
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+        }
+
+        button{
+            background-color: #333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>KK MART</h1>
+        <nav>
+            <a href="/farmer/dashboard">BACK</a>
+        </nav>
+    </header>
+    <div class="container">
+
+        <div class="author-info">
+            <div class="author-name">
+                <h1><%- getproduct[0].productname  %></h1>                  <!--Get Product information from the database-->
+                <!-- <i>image here</i> -->
+            </div>
+        </div>
+
+        <div class="author-name">Price : Rs <%- getproduct[0].price  %>
+        </div>
+
+        <div class="post-content">
+            <p>Desciption : <%- getproduct[0].description %></p>
+        </div>
+
+        <div class="post-footer">
+            Manufactured on <%- getproduct[0].createdAt.toISOString().slice(0,10) %>
+        </div>
+
+    <div class="operation">
+        <Button><a href="/farmer/editproduct/<%-getproduct[0].id %>">EDIT</a></Button>
+        <Button><a href="/farmer/deleteproduct/<%-getproduct[0].id %>">DELETE</a></Button>
+    </div>
+
+</body>
+</html>

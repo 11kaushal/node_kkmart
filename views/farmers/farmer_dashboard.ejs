@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<head>
+    <title>FARMER DASHBOARD</title>
+</head>
+<style>
+     body {
+            /* font-family: Arial, sans-serif; */
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+        }
+
+        .mycontainer {
+            max-width: 100%;
+            margin: 5px auto;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+
+        .card {
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px;
+            width: 265px;
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+        }
+
+        .card h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .card h3 {
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 16px;
+            line-height: 1.5;
+            min-height: 100px;
+        }
+
+        .card a{
+            color: blue;
+            text-decoration: none;
+            margin: 0 20px;
+
+        }
+
+        button{
+        background-color: black;
+        color: white;
+        padding: 5px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: small;
+    }
+
+    button:hover{
+        background-color: white;
+        color: black;
+    }
+
+    .kkbuttons{
+        display: flex;
+        justify-content: space-between;
+
+    }
+
+</style>
+<body>
+    <!-- <h1>I am from Home.ejs</h1> -->
+    <header>
+        <h1>KK MART</h1>
+        <nav>
+            HELLO FARMER
+        </nav>
+    </header>
+    <div class="kkbuttons">
+        <button onclick="location.href='/farmer/addproduct'">ADD</button>
+        <button onclick="location.href='/'">LOGOUT</button>
+    </div>
+    <div class="mycontainer">
+        <%  if(dbproducts.length == 0){ %>
+            <h1>No Products Available</h1>
+
+        <%  }else{ %>
+                <% dbproducts.forEach((kkproduct)=>{ %>
+                    <div class="card">
+                        <h2><%- kkproduct.productname  %></h2>
+                        <h3>Rs <%- kkproduct.price %></h3>
+                        <div>
+                            <p><%- kkproduct.description.slice(0,100) %></p>          <!--.slice(0,100)-->
+                        </div>
+                        <div>
+                            <a href="/farmer/viewproduct/<%-kkproduct.id %>" >View Product</a>
+                        </div>
+                    </div>
+             <%     }) %>
+        
+             <% } %>
+    </div>
+</body>
+</html>
