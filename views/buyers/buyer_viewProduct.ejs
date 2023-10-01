@@ -102,25 +102,26 @@
         </nav>
     </header>
     <div class="container">
-
         <div class="author-info">
             <div class="author-name">
-                <h1><%- getproduct[0].productname  %></h1>                  <!--Get Product information from the database-->
-                <!-- <i>image here</i> -->
+                <h1><%=getproduct.productname  %></h1>            
             </div>
         </div>
 
-        <div class="author-name">Price : Rs <%- getproduct[0].price  %>
+        <div class="author-name">
+            Price : Rs <%- getproduct.price  %>
         </div>
 
         <div class="post-content">
-            <p>Desciption : <%- getproduct[0].description %></p>
+            <p>Desciption : <%= getproduct.description %></p>
         </div>
 
         <div class="post-footer">
-            Manufactured on <%- getproduct[0].createdAt.toISOString().slice(0,10) %>
+            Manufactured on <%- getproduct.createdAt.toISOString().slice(0,10) %><br/>            
+            Manufactured by <%- getproduct.farmer.username %>      <!--username column fetched from LEFT OUTER JOIN table between farmer and product table-->         
         </div>
-
+       
+    </div>
     <div class="operation">
         <Button><a href="/buyer/sorry">BUY</a></Button>
     </div>

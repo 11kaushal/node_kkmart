@@ -1,5 +1,6 @@
 const { kkcustomers, kkproducts } = require("../model")
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 
 //Get Request to Buyer Registration
 exports.renderBuyerRegister = (req,res)=>{      //buyer_registration_form
@@ -47,6 +48,11 @@ exports.BuyerLogin = async(req,res)=>{           //buyer_login form submitted
         const isbuyerPassword = bcrypt.compareSync(password,emailExists.password)       //password hashing decrypt and compare
         if(isbuyerPassword){ //users.password is the vlaue from the users post request,,emailExists.password is the value available in database table
             //if password also matches 
+            //GENERATE TOKEN//
+            const token = jwt.sign({id:emailExists.id},"Admin@123#",{expiresIn: "30d"})
+            //SEND TOKEN TO CLIENT BROWSER'S COOKIES AS RESPONSE
+            res.cookie('token',token)
+            //////////////////////////
             res.redirect("/buyer/dashboard")
         }
         else{
@@ -60,9 +66,10 @@ exports.BuyerLogin = async(req,res)=>{           //buyer_login form submitted
 }
 
 //Get Request to Buyer Dashboard
-exports.renderBuyerDashboard = async(req,res)=>{                
+exports.renderBuyerDashboard = async(req,res)=>{ 
+    const buyer = req.buyer   
     const allproducts = await kkproducts.findAll()         //variable should br different i.e viewproducts
-    res.render("./buyers/buyer_dashboard",{dbproducts:allproducts})
+    res.render("./buyers/buyer_dashboard",{dbproducts:allproducts,buyer:buyer})
 }
 ///////Read/Get or fetch the database information in / directory/////////////////////
 // app.get ('/buyers/dashboard',async (req,res)=>{           
@@ -83,4 +90,9 @@ exports.renderBuyerDashboard = async(req,res)=>{
 //Get Request to buyer Buy Page
 exports.renderBuyerSorry = (req,res)=>{
     res.render("./buyers/buyer_sorry")
+}
+
+exports.BuyerLogout =(req,res)=>{
+    res.clearCookie('token')                //Clear client cookie token value
+    res.redirect("/buyer/login")
 }

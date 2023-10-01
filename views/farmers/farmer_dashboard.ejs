@@ -100,12 +100,12 @@
     <header>
         <h1>KK MART</h1>
         <nav>
-            HELLO FARMER
+            Hello, Welcome <%- farmer.username %>
         </nav>
     </header>
     <div class="kkbuttons">
         <button onclick="location.href='/farmer/addproduct'">ADD</button>
-        <button onclick="location.href='/'">LOGOUT</button>
+        <button onclick="location.href='/farmer/logout'">LOGOUT</button>
     </div>
     <div class="mycontainer">
         <%  if(dbproducts.length == 0){ %>
@@ -118,6 +118,9 @@
                         <h3>Rs <%- kkproduct.price %></h3>
                         <div>
                             <p><%- kkproduct.description.slice(0,100) %></p>          <!--.slice(0,100)-->
+                        </div>
+                        <div>
+                            
                         </div>
                         <div>
                             <a href="/farmer/viewproduct/<%-kkproduct.id %>" >View Product</a>

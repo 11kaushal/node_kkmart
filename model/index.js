@@ -37,4 +37,8 @@ db.sequelize.sync({ force: false }).then(() => {                        //Databa
     console.log("yes re-sync done");          
 });
 
+//relationship 1-M 
+db.kkfarmers.hasMany(db.kkproducts)
+db.kkproducts.belongsTo(db.kkfarmers)
+
 module.exports = db;

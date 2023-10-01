@@ -1,6 +1,6 @@
-const { kkproducts } = require("../model")
+const { kkproducts, kkfarmers } = require("../model")
 
-//Get Request to View Product
+//////Get Request to View Product By farmer//////
 exports.renderViewProduct = async(req,res)=>{                //get product id
     const id = req.params.id
     const getproduct = await kkproducts.findAll({          //Find all information of product with product id
@@ -26,12 +26,17 @@ exports.renderViewProduct = async(req,res)=>{                //get product id
 //Get Request to View Product by Buyer
 exports.renderViewProductByBuyer = async(req,res)=>{                //get product id
     const id = req.params.id
-    const getproduct = await kkproducts.findAll({          //Find all information of product with product id
-        where : {id:id}
+    const getproduct = await kkproducts.findOne({          //Find all information of product with product id
+        where : {
+            id:id
+        },
+        include : {
+            model: kkfarmers                    //SQLJoin farmers table with products table reference to farmerId, kkfarmers from index.js
+        }
     })
     res.render("./buyers/buyer_viewproduct",{getproduct:getproduct})
 }
-
+////////////////////////////////////////
 //Get  Request to Add Product
 exports.renderAddProduct = (req,res)=>{
     res.render("./farmers/farmer_addproduct")
@@ -44,12 +49,14 @@ exports.AddProduct = async (req,res)=>{                   //create '/addproduct'
     const productname = req.body.productname                //store post responsed data to varaible
     const price = req.body.price
     const description  = req.body.description
+    const farmerId = req.farmer.id                   //get farmerid vlaue from the middleware to be stored in the product table
 
 //-------async and await for database operations to insert value in table--------
     await kkproducts.create({                                           //kkproducts is the variable declared in model/index.js as db.kkproducts
         productname : productname,
         price : price,
-        description : description
+        description : description,
+        farmerId : farmerId              //add farmer id as a foreign key in product table to know, who added the products
     })
 
     res.redirect("/farmer/dashboard")                   //redirect to home after successful operation

@@ -1,5 +1,6 @@
-const { kkfarmers, kkproducts } = require("../model")
-const bcrypt = require("bcryptjs")
+const { kkfarmers, kkproducts } = require("../model")   //import models
+const bcrypt = require("bcryptjs")          //for hashing and salting
+const jwt = require("jsonwebtoken")         //for JWT
 
 //Get Request to Farmer Registration
 exports.renderFarmerRegister = (req,res)=>{
@@ -47,6 +48,12 @@ exports.FarmerLogin = async(req,res)=>{
         const isfarmerPassword = bcrypt.compareSync(password,emailExists.password)      //password hashing decrypt and compare
         if(isfarmerPassword){ //users.password is the vlaue from the users post request,,emailExists.password is the value available in database table
             //if password also matches 
+            //GENERATE TOKEN//
+            const token = jwt.sign({id:emailExists.id},"Admin@123#",{expiresIn: "30d"})
+            //SEND TOKEN TO CLIENT BROWSER'S COOKIES AS RESPONSE
+            res.cookie('token',token)
+            //////////////////////////
+
             res.redirect("/farmer/dashboard")
         }
         else{
@@ -60,8 +67,17 @@ exports.FarmerLogin = async(req,res)=>{
 }
 
 //Get Request to Farmer Dashboard
-exports.renderFarmerDashboard = async(req,res)=>{                
-    const allproducts = await kkproducts.findAll()         //variable should br different i.e viewproducts
-    res.render("./farmers/farmer_dashboard",{dbproducts:allproducts})
+exports.renderFarmerDashboard = async(req,res)=>{ 
+    const farmer = req.farmer                          //value provided by isfarmer middleware     
+    const allproducts = await kkproducts.findAll({
+        where:{
+            farmerId : farmer.id
+        }
+    })       
+    res.render("./farmers/farmer_dashboard",{dbproducts:allproducts,farmer:farmer})
 }
 
+exports.FarmerLogout = (req,res)=>{
+    res.clearCookie('token')                //Clear client cookie token value
+    res.redirect("/farmer/login")
+}
