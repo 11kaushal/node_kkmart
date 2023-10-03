@@ -49,7 +49,7 @@ exports.BuyerLogin = async(req,res)=>{           //buyer_login form submitted
         if(isbuyerPassword){ //users.password is the vlaue from the users post request,,emailExists.password is the value available in database table
             //if password also matches 
             //GENERATE TOKEN//
-            const token = jwt.sign({id:emailExists.id},"Admin@123#",{expiresIn: "30d"})
+            const token = jwt.sign({id:emailExists.id},process.env.BUYER_TOKEN,{expiresIn: "30d"})
             //SEND TOKEN TO CLIENT BROWSER'S COOKIES AS RESPONSE
             res.cookie('token',token)
             //////////////////////////

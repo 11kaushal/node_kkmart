@@ -2,9 +2,10 @@ const { kkproducts, kkfarmers } = require("../model")
 
 //////Get Request to View Product By farmer//////
 exports.renderViewProduct = async(req,res)=>{                //get product id
-    const id = req.params.id
+    const id = req.id
     const getproduct = await kkproducts.findAll({          //Find all information of product with product id
         where : {id:id}
+
     })
     res.render("./farmers/farmer_viewproduct",{getproduct:getproduct})
 }
@@ -31,7 +32,7 @@ exports.renderViewProductByBuyer = async(req,res)=>{                //get produc
             id:id
         },
         include : {
-            model: kkfarmers                    //SQLJoin farmers table with products table reference to farmerId, kkfarmers from index.js
+            model: kkfarmers                    //SQLJoin farmers table with products table reference to farmerId, kkfarmers from index.js.::Purpose::To display farmer detail in viewproduct by buyer 
         }
     })
     res.render("./buyers/buyer_viewproduct",{getproduct:getproduct})

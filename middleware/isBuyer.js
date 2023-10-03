@@ -10,7 +10,7 @@ exports.isBuyer = async (req,res,next)=>{     //middleware request->middleware->
     }
 
     //IF TOKEN AVAILABLE, DECODE TOKEN
-    const DecodedBuyer = await promisify(jwt.verify)(token,"Admin@123#")
+    const DecodedBuyer = await promisify(jwt.verify)(token,process.env.BUYER_TOKEN)
 
     //VERIFY USER EXISTANCE FROM FRAMER TABLE
     const isBuyer = await kkcustomers.findOne({
