@@ -79,7 +79,7 @@
     </header>
     <div class="container">
         <h2>Add Your Product</h2>
-        <form action= "/farmer/addproduct" method="post">
+        <form action= "/farmer/addproduct" method="post" enctype="multipart/form-data">     <!--enctype is MIME type-->
             <div class="form-group">
                 <label for="productname">Product Name:</label>
                 <input type="text" id="productname" name="productname" required>
@@ -91,6 +91,10 @@
             <div class="form-group">
                 <label for="description">Description:</label>
                 <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">Image:</label>
+                <input type="file" id="image" name="image" required>
             </div>
             <button type="submit">SUBMIT</button>
         </form>

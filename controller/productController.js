@@ -47,13 +47,21 @@ exports.renderAddProduct = (req,res)=>{
 exports.AddProduct = async (req,res)=>{                   //create '/addproduct' rest backend api       
     // const {productname, price, description} =req.body
             //OR second approach
+    // console.log(req.file)
+
+    const productimg = req.file                    //get filename from the multerConfig middleware
     const productname = req.body.productname                //store post responsed data to varaible
     const price = req.body.price
     const description  = req.body.description
     const farmerId = req.farmer.id                   //get farmerid vlaue from the middleware to be stored in the product table
+    //For server side validation
+    if(!productimg.filename || !productname || !price || !description){
+        return res.send("Please fill all the information")
+    }
 
 //-------async and await for database operations to insert value in table--------
-    await kkproducts.create({                                           //kkproducts is the variable declared in model/index.js as db.kkproducts
+    await kkproducts.create({                           //kkproducts is the variable declared in model/index.js as db.kkproducts
+        image : process.env.BACKEND_URL + productimg.filename,        //filename + Backend_baseURL = fileURL                              
         productname : productname,
         price : price,
         description : description,
@@ -61,14 +69,6 @@ exports.AddProduct = async (req,res)=>{                   //create '/addproduct'
     })
 
     res.redirect("/farmer/dashboard")                   //redirect to home after successful operation
-
-    //------------json formatted data to be called by frontend like react------------
-    // res.json({
-    //     status : 200,
-    //     message : "Product successfully created"
-
-    // })
-    // ---------------------------------------------------------
 }
 
 //Get Request to Edit Product
@@ -104,12 +104,4 @@ exports.renderDeleteProduct = async(req,res)=>{                //get product id
         where : {id:id}
     })
     res.redirect("/farmer/dashboard")
-
-    //------------json formatted data to be called by frontend like react------------
-    // res.json({
-    //     status : 200,
-    //     message : "Product successfully deleted"
-
-    // })
-    // ---------------------------------------------------------
 }

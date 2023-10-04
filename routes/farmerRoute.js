@@ -6,11 +6,16 @@ const { isFarmer } = require("../middleware/isFarmer")
 
 const router = require("express").Router()
 
+//IMPORT MULTER//
+const { multer,storage } = require("../middleware/multerConfig")
+const upload = multer({storage:storage})
+//////
+
 router.route("/register").get(renderFarmerRegister).post(FarmerRegister)
 router.route("/login").get(renderFarmerLogin).post(FarmerLogin)
 router.route("/dashboard").get(isFarmer,renderFarmerDashboard)
 router.route("/viewproduct/:id").get(isFarmer,isProductAuthorized,renderViewProduct)
-router.route("/addproduct").get(isFarmer,renderAddProduct).post(isFarmer,AddProduct)      //While post requested to add product, first verify the user in farmer table using middleware, if success, next add product
+router.route("/addproduct").get(isFarmer,renderAddProduct).post(isFarmer,upload.single('image'),AddProduct)      //while post request, image fieldname file stored in multerConsif Storage destination with specified filename
 router.route("/editproduct/:id").get(isFarmer,isProductAuthorized,renderEditProduct).post(isFarmer,isProductAuthorized,EditProduct)
 router.route("/deleteproduct/:id").get(isFarmer,isProductAuthorized,renderDeleteProduct)
 router.route("/logout").get(isFarmer,FarmerLogout)

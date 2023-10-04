@@ -12,12 +12,19 @@ require("./model/index")            //import database connection and table creat
 
 //Middleware//
 app.use(cookieParser())     //To parse the clent browser cookies
+app.use(express.static("./public/products/"))  // to serve static files like images,css,js etc from public folder
 ////////////////////////
 
 // --------------Parse data from form in json format-----
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 //----------------------------------------------
+///////////////////Global variable////////////////
+// app.use((req,res,next)=>{
+//     res.locals.name = "KAUSHAL"
+//     next()
+// })
+//////////////////////////////////////////
 
 app.get("/",(req,res)=>{
     res.render("home")
@@ -35,5 +42,6 @@ const PORT = process.env.NODE_DOCKER_PORT || 3080;
 app.listen(PORT,function(params) {
     console.log("Hello world, from node js on ",PORT)
 })
+
 
 

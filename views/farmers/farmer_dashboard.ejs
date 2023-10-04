@@ -114,6 +114,7 @@
         <%  }else{ %>
                 <% dbproducts.forEach((kkproduct)=>{ %>
                     <div class="card">
+                        <img src="<%= kkproduct.image %>" alt="" height="200" width="265">
                         <h2><%- kkproduct.productname  %></h2>
                         <h3>Rs <%- kkproduct.price %></h3>
                         <div>

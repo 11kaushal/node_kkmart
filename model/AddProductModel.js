@@ -3,6 +3,9 @@
 
 module.exports = (sequelize, DataTypes) => {
     const Product = sequelize.define("myproduct", {       //kkproduct as table name and its columns
+      image: {
+        type: DataTypes.STRING                            
+      },
       productname: {
         type: DataTypes.STRING,
         allowNull: false,                               //Value could not be null
