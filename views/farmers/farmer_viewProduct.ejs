@@ -86,7 +86,7 @@
         }
 
         button{
-            background-color: #333;
+            background-color: black;
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
@@ -102,7 +102,6 @@
         </nav>
     </header>
     <div class="container">
-
         <div class="author-info">
             <div class="author-name">
                 <img src="<%= getproduct[0].image %>" alt="" height="200" width="200">
@@ -111,8 +110,7 @@
             </div>
         </div>
 
-        <div class="author-name">Price : Rs <%- getproduct[0].price  %>
-        </div>
+        <div class="author-name">Price : Rs <%- getproduct[0].price  %></div>
 
         <div class="post-content">
             <p>Desciption : <%- getproduct[0].description %></p>
@@ -123,8 +121,15 @@
         </div>
 
     <div class="operation">
-        <Button><a href="/farmer/editproduct/<%-getproduct[0].id %>">EDIT</a></Button>
-        <Button><a href="/farmer/deleteproduct/<%-getproduct[0].id %>">DELETE</a></Button>
+        <div style=" display: flex; justify-content: space-between;margin-top: 10px;">
+            <Button style=" background-color: rgb(7, 70, 217);padding: 10px 20px;border: none;border-radius: 4px;cursor: pointer;">
+                <a href="/farmer/editproduct/<%-getproduct[0].id %>">EDIT</a>
+            </Button>
+            <Button style=" background-color: rgb(186, 4, 4);padding: 10px 20px;border: none;border-radius: 4px;cursor: pointer;">
+                <a href="/farmer/deleteproduct/<%-getproduct[0].id %>" >DELETE</a>
+            </Button>
+            </form>
+        </div>
     </div>
 
 </body>

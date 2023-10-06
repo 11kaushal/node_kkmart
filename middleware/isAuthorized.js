@@ -19,6 +19,7 @@ exports.isProductAuthorized = async(req,res,next)=>{     //middleware request->m
         //IF FARMER OWNS THE PRODUCT ,THEN ONLY ALLOWED TO VIEW/EDIT/DELETE PRODUCT
         // console.log("Product Found")
         req.id=productid
+        req.products = MyProducts
         next()   
     }
 }

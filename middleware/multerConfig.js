@@ -19,9 +19,11 @@ var storage = multer.diskStorage({
     // This defines the file name for storing files
     filename: function (req,file,callback) {
         const farmerid=req.farmer.id            //Get farmer id to add preffix in filename
+        const productid = req.params.id
+        console.log(productid)
         // The cb function is a callback that takes two parameters: an error and a name
         // The null argument means there is no error
-        callback(null, "Farmer_00"+farmerid+"-"+Date.now()+ "-" +file.originalname)       // The file.originalname argument means the files will be stored with their original names
+        callback(null, "FID_0"+farmerid+"-PID_0"+productid+"-"+Date.now()+ "-" +file.originalname)       // The file.originalname argument means the files will be stored with their original names
     }
 })
 

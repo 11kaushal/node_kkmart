@@ -1,4 +1,5 @@
 const { kkproducts, kkfarmers } = require("../model")
+const fs = require("fs")
 
 //////Get Request to View Product By farmer//////
 exports.renderViewProduct = async(req,res)=>{                //get product id
@@ -82,26 +83,62 @@ exports.renderEditProduct = async (req,res)=>{
 
 //Post Request from Edit Product
 exports.EditProduct = async(req,res)=>{
-    const id = req.params.id
-    const productname = req.body.productname        
-    const price = req.body.price
-    const description  = req.body.description
+    const products = req.products       //product information from is authorized middleware
+    const id = req.params.id            //url pasrameter
+    const productname = req.body.productname    //from farmer edit product form body   
+    const price = req.body.price                //from farmer edit product form body  
+    const description  = req.body.description      //from farmer edit product form body  
+    let imagefile;                                   //imagefile as changeable value 
+    const oldimagefile = products[0].image.slice(process.env.BACKEND_URL.length)    //By slicing the baseurl from the imagefileurl in database we get Old image filename
+
+    if(req.file){               
+        imagefile = req.file.filename                           //New updated image filename, if uploaded     
+        
+        fs.unlink("public/products/"+oldimagefile,(err)=>{       //delete the old image file from the public/products folder 
+            if(err){
+                res.send("Error While deleting",err)
+            }
+            else{
+                res.redirect("/farmer/viewproduct/" +id)
+            }
+        })
+
+    }else{
+        imagefile = oldimagefile
+    }
+
+    
+
     await kkproducts.update({          //Update all information of product with product id
+        image: process.env.BACKEND_URL+ imagefile,      //update the fileurl = Baseurl+suffixed_filename
         productname: productname,
         price: price,
         description: description
-    },{
-
-        where : {id:id}
-    })
-    res.redirect("/farmer/viewproduct/" +id)
+        },{
+            where : {id:id}
+        }
+    )
+    
 }
 
+
 //Get Request to Delete Product
-exports.renderDeleteProduct = async(req,res)=>{                //get product id
+exports.DeleteProduct = async(req,res)=>{                //get product id
     const id = req.params.id
+    const products = req.products
+    // const imageurl = products[0].image
+    // console.log(imageurl)
+    // console.log(process.env.BACKEND_URL)
     await kkproducts.destroy({          //Find all information of product with product id
         where : {id:id}
     })
-    res.redirect("/farmer/dashboard")
+
+    fs.unlink("public/products/"+products[0].image.slice(process.env.BACKEND_URL.length),(err)=>{       //delete the file from the public/products folder by slicing the baseurl from the imageurl in database
+        if(!err){
+            res.redirect("/farmer/dashboard")
+        }
+        else{
+            res.send("Error While deleting",err)
+        }
+    })
 }
