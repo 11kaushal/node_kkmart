@@ -1,5 +1,5 @@
 
-const { renderFarmerRegister, FarmerRegister, renderFarmerLogin, FarmerLogin, renderFarmerDashboard, FarmerLogout } = require("../controller/farmerController")
+const { renderFarmerRegister, FarmerRegister, renderFarmerLogin, FarmerLogin, renderFarmerDashboard, FarmerLogout, renderverify, sendotp, getotp, verifyotp, renderReset, reset } = require("../controller/farmerController")
 const { renderViewProduct, renderAddProduct, AddProduct, renderEditProduct, EditProduct, DeleteProduct } = require("../controller/productController")
 const { isProductAuthorized } = require("../middleware/isAuthorized")
 const { isFarmer } = require("../middleware/isFarmer")
@@ -19,5 +19,8 @@ router.route("/addproduct").get(isFarmer,renderAddProduct).post(isFarmer,upload.
 router.route("/editproduct/:id").get(isFarmer,isProductAuthorized,renderEditProduct).post(isFarmer,isProductAuthorized,upload.single('image'),EditProduct)
 router.route("/deleteproduct/:id").get(isFarmer,isProductAuthorized,DeleteProduct)
 router.route("/logout").get(isFarmer,FarmerLogout)
+router.route("/verify").get(renderverify).post(sendotp)
+router.route("/otp").get(getotp).post(verifyotp)
+router.route("/reset").get(renderReset).post(reset)
 
 module.exports = router

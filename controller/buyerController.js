@@ -1,6 +1,7 @@
 const { kkcustomers, kkproducts } = require("../model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const sendEmail = require("../services/sendEmail")
 
 //Get Request to Buyer Registration
 exports.renderBuyerRegister = (req,res)=>{      //buyer_registration_form
@@ -14,7 +15,7 @@ exports.BuyerRegister = async(req,res)=>{    //buyer_registration form submitted
     const password = req.body.password
 
     //If the information filed in empty
-    if(!email || !username || !password){
+    if(!email || !username || !password){           //for server validation only
         return res.send("Please fill all information")
     }
 
@@ -29,7 +30,9 @@ exports.BuyerRegister = async(req,res)=>{    //buyer_registration form submitted
 
 //Get Request to Buyer Login
 exports.renderBuyerLogin = (req,res)=>{                 //buyer_login_form
-    res.render("./buyers/buyer_login")
+    const invalidemail = req.flash("invalidemail")     //store invalidemail key value to invalidemail constant
+    const invalidpassword =req.flash("invalidpassword")
+    res.render("./buyers/buyer_login",{invalidemail,invalidpassword,})      //send the invalidemail value to ./buyers/buyer_login.ejs to display
 }
 
 //Post Request from Buyer Login
@@ -53,15 +56,18 @@ exports.BuyerLogin = async(req,res)=>{           //buyer_login form submitted
             //SEND TOKEN TO CLIENT BROWSER'S COOKIES AS RESPONSE
             res.cookie('token',token)
             //////////////////////////
+            req.flash("loggedin","Successfully LoggedIn !!")
             res.redirect("/buyer/dashboard")
         }
         else{
-            res.send("Invalid Password!!")
+            req.flash("invalidpassword","Invalid Password")         //store message in flash invalidpassword key
+            res.redirect('/buyer/login')
         }
 
     }
     else{
-        res.send("Invalid Email!!")
+        req.flash("invalidemail","Invalid Email")
+        res.redirect('/buyer/login')
     }
 }
 
@@ -69,7 +75,8 @@ exports.BuyerLogin = async(req,res)=>{           //buyer_login form submitted
 exports.renderBuyerDashboard = async(req,res)=>{ 
     const buyer = req.buyer   
     const allproducts = await kkproducts.findAll()         //variable should br different i.e viewproducts
-    res.render("./buyers/buyer_dashboard",{dbproducts:allproducts,buyer:buyer})
+    const loggedin = req.flash("loggedin")
+    res.render("./buyers/buyer_dashboard",{dbproducts:allproducts,buyer:buyer,loggedin})
 }
 ///////Read/Get or fetch the database information in / directory/////////////////////
 // app.get ('/buyers/dashboard',async (req,res)=>{           
@@ -92,7 +99,71 @@ exports.renderBuyerSorry = (req,res)=>{
     res.render("./buyers/buyer_sorry")
 }
 
+//Get Request to Logout
 exports.BuyerLogout =(req,res)=>{
     res.clearCookie('token')                //Clear client cookie token value
     res.redirect("/buyer/login")
+}
+
+//Get Request to /verify to rent emailaddress input for user
+exports.renderverify=(req,res)=>{
+    const unverifiedemail = req.flash('unverifiedemail')
+    res.render('./buyers/forgotpassword',{unverifiedemail})
+}
+
+//Post Request to /verify email to send otp via nodemailer
+exports.sendotp=async (req,res)=>{
+    const verifyemail=req.body.email                     //fetching email from body part of request
+
+    if(!verifyemail){ 
+        //IF VERIFICATION EMAIL IS NOT PROVIDED                            
+        res.send('Please provide verification email')
+    }
+
+    const emailExists = await kkcustomers.findOne({     //FIND EMAIL IN DATABASE
+        where:{
+            email: verifyemail
+        }
+    })
+    if(emailExists){
+        //IF EMAIL EXISTS
+        const generatedOTP = Math.round(Math.random()*8999+1000)
+        //SEND OTP
+        await sendEmail({
+            email : verifyemail,
+            subject : "Verify Email",
+            otp : generatedOTP
+        })
+        
+        res.redirect("/buyer/otp")
+        
+    }
+    else{
+        //IF EMAIL DOESNOT EXISTS
+        req.flash('unverifiedemail','Invalid Verification email')
+        res.redirect('/buyer/verify')
+    }
+}
+
+
+    
+
+//Get request to /otp to render otp input for user
+exports.getotp=(req,res)=>{
+    res.render('./buyers/getotp')
+}
+
+//Post request to /otp to veirfy the otp with database and redirect to reset password page
+exports.verifyotp=(req,res)=>{
+    res.redirect('/buyer/reset')
+}
+
+//Get request to /reset to render new password input for user
+exports.renderReset=(req,res)=>{
+    res.render('./buyers/resetPassword')
+}
+
+//Post request to /reset to update new password on database and redirect to Login Page
+exports.reset=(req,res)=>{
+    res.redirect('/buyer/login')
 }

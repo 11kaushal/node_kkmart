@@ -44,7 +44,7 @@
         }
 
         .form-group input {
-            width: 100%;
+            width: 95%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -54,6 +54,7 @@
             background-color: black;
             color: #fff;
             cursor: pointer;
+            width: 100%;
         }
 
         .form-group input[type="submit"]:hover {
@@ -84,16 +85,20 @@
         </nav>
     </div>
     <div class="container">
-        <h2>HELLO BUYER</h2>
+        <h2>LOGIN AS BUYER</h2>
         <form action="/buyer/login" method="post">
+            <p><%- invalidemail %></p>
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
             </div>
-          
-            <div class="form-group">
+            <p><%- invalidpassword %></p>
+            <div class="form-group" style="margin-bottom: 0px;"">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
+            </div>
+            <div style="padding: 5px;">
+                <a style='text-decoration: none;font-weight: bold;'href="/buyer/verify">Forgot Password ?</a>
             </div>
             <div class="kkregister">
                 Haven't Registered ? Please 

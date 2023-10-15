@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FARMER LOGIN</title>
+    <title>FARMER</title>
     <style>
         body {
             /* font-family: Arial, sans-serif; */
@@ -44,7 +44,7 @@
         }
 
         .form-group input {
-            width: 95%;
+            width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -54,7 +54,6 @@
             background-color: black;
             color: #fff;
             cursor: pointer;
-            width: 100%;
         }
 
         .form-group input[type="submit"]:hover {
@@ -62,9 +61,6 @@
             color: black;
         }
 
-        .kkregister{
-            padding: 5px;
-    }
     nav {
             display: flex;
             justify-content: center;
@@ -85,27 +81,14 @@
         </nav>
     </div>
     <div class="container">
-        <h2>LOGIN AS FARMER</h2>
-        <form action="/farmer/login" method="post">
-            <p><%- invalidemail %></p>
+        <h2>VERIFY AS FARMER</h2>
+        <form action="/farmer/otp" method="post">
             <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <p><%- invalidpassword %></p>
-            <div class="form-group" style="margin-bottom: 0px;">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div style="padding: 5px;">
-                <a style='text-decoration: none;font-weight: bold;'href="/farmer/verify">Forgot Password ?</a>
-            </div>
-            <div class="kkregister">
-                Haven't Registered ? Please 
-                <a style='text-decoration: none;font-weight: bold;' href='register'> Register</button>
+                <label for="otp">OTP:</label>
+                <input type="text" pattern="^[0-9]+$" id="otp" name="otp" required>
             </div>
             <div class="form-group">
-                <input type="submit" value="LOGIN">
+                <input type="submit" value="VERIFY OTP">
             </div>
         </form>
     </div>
